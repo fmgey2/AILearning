@@ -13,6 +13,7 @@ locals {
 locals {
   default_common_tags = {
     workload   = "FMG BIS Legacy Sandbox"
+    costCentre = "LegacySandbox"
     deployType = "Terraform"
     source     = "https://github.com/fmgey2/AILearning"
     owner      = "Eric Yu"
