@@ -6,6 +6,13 @@ data "azurerm_resource_group" "ERIC" {
   name = "ERIC"
 }
 
+locals {
+  inherited_tags = merge(
+    data.azurerm_resource_group.ERIC.tags,
+    { "AI learning" = "true" }
+  )
+}
+
 data "azurerm_client_config" "current" {}
 
 data "azuread_user" "users" {

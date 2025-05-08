@@ -9,3 +9,13 @@ locals {
     "james.gorman@fmg.co.nz"
   ]
 }
+
+locals {
+  default_common_tags = {
+    workload   = "FMG BIS Legacy Sandbox"
+    deployType = "Terraform"
+    source     = "https://github.com/fmgey2/AILearning"
+    owner      = "Eric Yu"
+  }
+  common_tags = merge(local.default_common_tags, var.common_tags)
+}

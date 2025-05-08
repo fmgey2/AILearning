@@ -4,6 +4,14 @@ resource "azurerm_storage_account" "eric_storage" {
   location                 = "australiaeast"
   account_tier             = "Standard"
   account_replication_type = "LRS"
+
+    tags = merge(
+    local.common_tags,
+    {
+      description = "Storage account for AI Foundry"
+    }
+  )
+
 }
 
 resource "azurerm_key_vault" "eric_vault" {
@@ -14,23 +22,6 @@ resource "azurerm_key_vault" "eric_vault" {
   tenant_id           = data.azurerm_subscription.current.tenant_id
 
   purge_protection_enabled = false
-
-  dynamic "access_policy" {
-    for_each = data.azuread_user.users
-
-    content {
-      tenant_id = data.azurerm_client_config.current.tenant_id
-      object_id = access_policy.value.object_id
-
-      key_permissions = [
-        "Get", "List", "Create", "Delete", "Update"
-      ]
-
-      secret_permissions = [
-        "Get", "List", "Set", "Delete"
-      ]
-    }
-  }
 
   access_policy {
     tenant_id = data.azurerm_client_config.current.tenant_id
@@ -44,6 +35,13 @@ resource "azurerm_key_vault" "eric_vault" {
       "Get", "List", "Set", "Delete"
     ]
   }
+
+  tags = merge(
+    local.common_tags,
+    {
+      description = "Key Vault for AI Foundry"
+    }
+  )
 }
 
 resource "azurerm_ai_services" "eric-ai-service" {
@@ -52,9 +50,12 @@ resource "azurerm_ai_services" "eric-ai-service" {
   resource_group_name = data.azurerm_resource_group.ERIC.name
   sku_name            = "S0"
 
-  tags = {
-    environment = "learning"
-  }
+  tags = merge(
+    local.common_tags,
+    {
+      description = "AI Services for AI Foundry"
+    }
+  )
 }
 
 resource "azurerm_ai_foundry" "eric-ai-foundry" {
@@ -68,15 +69,18 @@ resource "azurerm_ai_foundry" "eric-ai-foundry" {
     type = "SystemAssigned"
   }
 
-  tags = {
-    environment = "learning"
-  }
+  tags = merge(
+    local.common_tags,
+    {
+      description = "AI Foundry Workspace"
+    }
+  )
 }
 
-resource "azurerm_role_assignment" "storage_contributor" {
+resource "azurerm_role_assignment" "ai_developer_role" {
   for_each = data.azuread_user.users
 
-  scope                = azurerm_storage_account.eric_storage.id
-  role_definition_name = "Storage Blob Data Contributor"
+  scope                = azurerm_ai_foundry.eric-ai-foundry.id
+  role_definition_name = "Azure AI Developer"
   principal_id         = each.value.object_id
 }

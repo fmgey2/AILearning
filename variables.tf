@@ -15,3 +15,10 @@ variable "location" {
   type        = string
   default     = "Australiaeast"
 }
+
+variable "common_tags" {
+  description = "Common tags applied to all the resources created in this module"
+  type        = map(string)
+  default = {
+  }
+}
