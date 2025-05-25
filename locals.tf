@@ -6,7 +6,11 @@ locals {
     "kyle.burmeister@fmg.co.nz",
     "wiremu.winitana@fmg.co.nz",
     "daniel.sutton-claridge@fmg.co.nz",
-    "james.gorman@fmg.co.nz"
+    "james.gorman@fmg.co.nz",
+    "jackie.eggels@fmg.co.nz",
+    "david.karl@fmg.co.nz",
+    "mahesh.joshi@fmg.co.nz",
+    "annie.overall@fmg.co.nz"
   ]
 }
 
